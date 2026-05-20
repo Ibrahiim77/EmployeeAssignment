@@ -4,5 +4,7 @@ const controller = require('../controllers/DepartmentController');
 
 router.get('/', controller.getDepartments);
 router.post('/', controller.addDepartment);
-router.put('/', controller.updateDepartment);
-router.delete('/', controller.deleteDepartment);
+router.put('/:id', controller.updateDepartment);
+router.delete('/:id', controller.deleteDepartment);
+
+module.exports = router;
