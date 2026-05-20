@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../services/EmployeeService.dart';
 import '../../models/EmployeeModel.dart';
-
+import 'AddEmployee.dart';
+import 'EditEmployee.dart';
 
 class EmployeeList extends StatefulWidget {
   const EmployeeList({super.key});
