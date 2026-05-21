@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
-import '../../services/EmployeeService.dart';
-import '../../models/EmployeeModel.dart';
-import 'AddEmployee.dart';
-import 'EditEmployee.dart';
 
-class EmployeeList extends StatefulWidget {
-  const EmployeeList({super.key});
+import '../../models/DepartmentModel.dart';
+import '../../services/DepartmentService.dart';
+
+import 'AddDepartment.dart';
+import 'EditDepartment.dart';
+
+class DepartmentList extends StatefulWidget {
+
+  const DepartmentList({super.key});
 
   @override
-  State<EmployeeList> createState() => _EmployeeListState();
+  State<DepartmentList> createState() => _DepartmentListState();
 }
 
-class _EmployeeListState extends State<EmployeeList> {
+class _DepartmentListState extends State<DepartmentList> {
 
-  List<Employee> list = [];
+  List<Department> list = [];
+
   bool isLoading = true;
 
-  load() async {
+  loadDepartments() async {
 
     setState(() {
       isLoading = true;
@@ -24,11 +28,11 @@ class _EmployeeListState extends State<EmployeeList> {
 
     try {
 
-      list = await Employeeservice.getEmployees();
+      list = await Departmentservice.getDepartments();
 
     } catch (e) {
 
-      debugPrint("Error loading employees: $e");
+      debugPrint("Load Error: $e");
 
     }
 
@@ -37,20 +41,19 @@ class _EmployeeListState extends State<EmployeeList> {
     });
   }
 
-
-  deleteEmployee(int id) async {
+  deleteDepartment(int id) async {
 
     try {
 
-      await Employeeservice.deleteEmployee(id);
+      await Departmentservice.deleteDepartment(id);
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("Employee Deleted"),
+          content: Text("Department Deleted"),
         ),
       );
 
-      load();
+      loadDepartments();
 
     } catch (e) {
 
@@ -62,7 +65,7 @@ class _EmployeeListState extends State<EmployeeList> {
   @override
   void initState() {
     super.initState();
-    load();
+    loadDepartments();
   }
 
   @override
@@ -71,8 +74,7 @@ class _EmployeeListState extends State<EmployeeList> {
     return Scaffold(
 
       appBar: AppBar(
-        title: const Text("Employees"),
-        centerTitle: true,
+        title: const Text("Departments"),
       ),
 
       body: isLoading
@@ -84,66 +86,51 @@ class _EmployeeListState extends State<EmployeeList> {
           : list.isEmpty
 
           ? const Center(
-        child: Text(
-          "No Employees Found",
-          style: TextStyle(fontSize: 18),
-        ),
+        child: Text("No Departments Found"),
       )
 
           : Padding(
+
         padding: const EdgeInsets.all(10),
+
         child: ListView.builder(
 
           itemCount: list.length,
 
           itemBuilder: (context, i) {
 
-            final s = list[i];
+            final d = list[i];
 
             return Card(
 
               elevation: 4,
-              margin: const EdgeInsets.only(bottom: 12),
 
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
+              margin: const EdgeInsets.only(bottom: 12),
 
               child: ListTile(
 
-                contentPadding: const EdgeInsets.all(12),
-
                 leading: CircleAvatar(
                   child: Text(
-                    s.name![0].toUpperCase(),
+                    d.name![0].toUpperCase(),
                   ),
                 ),
 
                 title: Text(
-                  s.name ?? "No Name",
+                  d.name ?? "",
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
 
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-
-                    const SizedBox(height: 5),
-
-                    Text("Email: ${s.email}"),
-
-                    Text("Salary: ${s.salary}"),
-
-                    Text("Department: ${s.department}"),
-                  ],
+                subtitle: Text(
+                  "Location: ${d.location}",
                 ),
 
                 trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
 
+                  mainAxisSize: MainAxisSize.min,
+
+                  children: [
 
                     IconButton(
 
@@ -157,16 +144,15 @@ class _EmployeeListState extends State<EmployeeList> {
                         await Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => EditEmployee(
-                              employee: s,
+                            builder: (_) => EditDepartment(
+                              department: d,
                             ),
                           ),
                         );
 
-                        load();
+                        loadDepartments();
                       },
                     ),
-
 
                     IconButton(
 
@@ -178,6 +164,7 @@ class _EmployeeListState extends State<EmployeeList> {
                       onPressed: () {
 
                         showDialog(
+
                           context: context,
 
                           builder: (_) => AlertDialog(
@@ -185,7 +172,7 @@ class _EmployeeListState extends State<EmployeeList> {
                             title: const Text("Delete"),
 
                             content: const Text(
-                              "Are you sure you want to delete?",
+                              "Are you sure?",
                             ),
 
                             actions: [
@@ -203,7 +190,7 @@ class _EmployeeListState extends State<EmployeeList> {
 
                                   Navigator.pop(context);
 
-                                  deleteEmployee(s.id!);
+                                  deleteDepartment(d.id!);
 
                                 },
 
@@ -222,7 +209,6 @@ class _EmployeeListState extends State<EmployeeList> {
         ),
       ),
 
-
       floatingActionButton: FloatingActionButton(
 
         child: const Icon(Icons.add),
@@ -232,11 +218,11 @@ class _EmployeeListState extends State<EmployeeList> {
           await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => const AddEmployee(),
+              builder: (_) => const AddDepartment(),
             ),
           );
 
-          load();
+          loadDepartments();
         },
       ),
     );

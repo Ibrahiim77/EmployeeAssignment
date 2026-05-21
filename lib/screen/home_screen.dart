@@ -1,6 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import './employees/employee_list.dart';
+import './departments/department_list.dart';
+
 
 
 class HomeScreen extends StatelessWidget{
@@ -15,11 +18,21 @@ class HomeScreen extends StatelessWidget{
       body: Center(
         child: Column(
           children: [
-            ElevatedButton(onPressed: (){},
+            ElevatedButton(onPressed: (){
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const EmployeeList())
+              );
+            },
                 child: const Text("Employee Module"),
             ),
 
-            ElevatedButton(onPressed: (){},
+            ElevatedButton(onPressed: (){
+
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const DepartmentList()),
+              );
+
+            },
                 child:
                    const Text("Department Module"),
             ),
