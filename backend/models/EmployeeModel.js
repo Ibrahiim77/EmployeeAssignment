@@ -8,9 +8,14 @@ db.query('Select * from employees', callback);
 };
 
 exports.create = (data, callback) => {
+  const sql = 'INSERT INTO employees SET ?';
 
-db.query('Insert into employees SET ?', data, callback);
-
+  db.query(sql, data, (err, result) => {
+    if (err) {
+      return callback(err, null);
+    }
+    return callback(null, result);
+  });
 };
 
 exports.update = (id, data, callback) => {

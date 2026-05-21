@@ -22,20 +22,26 @@ return res.json({message: "Employee added"});
 
 exports.updateEmployee = (req, res) => {
 
-employee.update(req.body, (err, result) => {
+  const id = req.params.id;
 
-if(err) return res.json(err);
-return res.json({message: "UPDATED EMPLOYEE"});
-});
+  employee.update(id, req.body, (err, result) => {
+
+    if (err) return res.json(err);
+
+    return res.json({ message: "UPDATED EMPLOYEE" });
+  });
 };
 
 
 exports.deleteEmployee = (req, res) => {
 
-employee.delete(req.body, (err,result) => {
+  const id = req.params.id;
 
-if(err) return res.json(err);
-return res.json({message: "EMPLOYEE DELETED"});
-});
+  employee.delete(id, (err, result) => {
+
+    if (err) return res.status(500).json(err);
+
+    return res.json({ message: "EMPLOYEE DELETED" });
+  });
 };
 
